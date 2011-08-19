@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Joomla! 1.5 compatible install file too, sexy! -->
+<install type="tableeditor_table" version="1.5">
+	<name>JAuthTools IP Map</name>
+	<table>jauthtools_ipmap</table>.
+	<description>The JAuthTools IP Map table is used by the JAuthTools IP SSO plugin to map addresses</description>
+	<key>id</key>
+	<!-- Fields to use in a list view -->
+	<list>
+		<column name="ID" key="id" />
+		<column name="Entry" key="entry" />
+		<column name="Username" key="username" />
+	</list>
+	<!-- All fields in the table -->
+	<params>
+		<param name="id" type="text" label="Entry ID" description="Unique ID of the entry" writeable="false" />
+		<param name="entry" type="text" label="Entry" description="IP Address or range to match" />
+		<param name="username" type="text" label="Username" description="Username of the remote location" />
+		<param name="description" type="text" label="Description" description="Description of this entry"/>
+	</params>
+	<install>
+CREATE TABLE IF NOT EXISTS `#__jauthtools_ipmap` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `entry` varchar(40) NOT NULL,
+  `username` varchar(150) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+	</install>
+	<uninstall>
+DROP TABLE IF EXISTS `#__jauthtools_ipmap`;
+	</uninstall>
+</install>

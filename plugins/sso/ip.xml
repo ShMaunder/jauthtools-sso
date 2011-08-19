@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin"  group="sso">
+	<name>SSO - IP</name>
+	<author>Sam Moffatt</author>
+	<creationDate>November 2010</creationDate>
+	<copyright>(C) 2010 Sam Moffatt. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>pasamio@gmail.com</authorEmail>
+	<authorUrl>sammoffat.com.au</authorUrl>
+	<version>1.6.0</version>
+	<update>http://www.jsitepoint.com/update/plugins/plgssoip</update>
+	<description>Automatically logs users as administrator if they are on the IP list.</description>
+	<files>
+		<filename plugin="ip">ip.php</filename>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="ip_list" default="" type="textarea" cols="30" rows="10" label="IP List" description="IP addresses to use for Single Sign On (newline seperated)"/>
+				<field name="user" default="admin" type="text" label="Username" description="User to automatically login as" />
+				<field name="use_table" default="0" type="radio" label="Use Table" description="Uses the #__jauthtools_ipmap table to map IP addresses or ranges to usernames">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

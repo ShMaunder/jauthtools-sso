@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin"  group="system">
+	<name>System - Single Sign On</name>
+	<author>Sam Moffatt</author>
+	<creationDate>November 2010</creationDate>
+	<copyright>(C) 2010 Sam Moffatt. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>pasamio@gmail.com</authorEmail>
+	<authorUrl>sammoffatt.com.au/jauthtools/</authorUrl>
+	<version>1.6.0</version>
+	<update>http://www.jsitepoint.com/update/plugins/plgsystemsso</update>
+	<description>This plugin provides the base of the JAuthTools SSO infrastructure.</description>
+	<files>
+		<filename plugin="sso">sso.php</filename>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="autocreate" type="radio" default="0" label="Auto Create Users" description="PARAMAUTOCREATEUSERS">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="ip_blacklist" default="" type="textarea" cols="30" rows="10" label="IP Blacklist" description="IP addresses to ignore for Single Sign OnIP addresses to ignore for Single Sign On (newline seperated)"/>
+				<field name="backend" type="radio" default="0" label="Enable Backend SSO" description="Enables SSO for the administrator section">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="override" type="radio" default="0" label="Override logged in user" description="If a user is already logged in, SSO will not attempt to log them in">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
