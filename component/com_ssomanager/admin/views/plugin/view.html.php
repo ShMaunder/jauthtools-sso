@@ -39,7 +39,7 @@ class ssomanagerviewPlugin extends JView
 		JArrayHelper::toInteger($cid, array(0));
 
 		$lists 	= array();
-		$row 	=& JTable::getInstance('plugin');
+		$row 	=& JTable::getInstance('extension');
 
 		// load the row from the db table
 		$row->load( $cid[0] );
@@ -75,9 +75,9 @@ class ssomanagerviewPlugin extends JView
 			{
 				// build the html select list for ordering
 				$query = 'SELECT ordering AS value, name AS text'
-					. ' FROM #__plugins'
+					. ' FROM #__extensions'
 					. ' WHERE folder = '.$db->Quote($row->folder)
-					. ' AND published > 0'
+					. ' AND state > 0'
 					. ' AND '. $where
 					. ' AND ordering > -10000'
 					. ' AND ordering < 10000'
@@ -99,13 +99,13 @@ class ssomanagerviewPlugin extends JView
 		} else {
 			$row->folder 		= '';
 			$row->ordering 		= 999;
-			$row->published 	= 1;
+			$row->state 		= 1;
 			$row->description 	= '';
 			// Fudge this, its technically wrong but it'll evaluate to zero and then normality will take over
 			$lists['ordering'] = '<input type="hidden" name="ordering" value="'. $row->ordering .'" />'. JText::_( 'This plugin cannot be reordered' );
 		}
 
-		$lists['published'] = JHTML::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
+		$lists['state'] = JHTML::_('select.booleanlist',  'state', 'class="inputbox"', $row->state);
 
 		// get params definitions
 		$params = new JParameter( $row->params, JApplicationHelper::getPath( 'plg_xml', $row->folder.DS.$row->element ), 'plugin' );

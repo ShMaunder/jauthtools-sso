@@ -42,7 +42,7 @@
 				<?php echo JText::_( 'Published' ); ?>:
 			</td>
 			<td>
-				<?php echo $this->lists['published']; ?>
+				<?php echo $this->lists['state']; ?>
 			</td>
 		</tr>
 		<tr>
@@ -134,7 +134,7 @@
 <div class="clr"></div>
 
 	<input type="hidden" name="option" value="com_ssomanager" />
-	<input type="hidden" name="plugin_id" value="<?php echo $this->provider->plugin_id; ?>" />
+	<input type="hidden" name="extension_id" value="<?php echo $this->provider->extension_id; ?>" />
 	<input type="hidden" name="id" value="<?php echo $this->provider->id; ?>" />
 	<input type="hidden" name="cid[]" value="<?php echo $this->provider->id; ?>" />
 	<input type="hidden" name="task" value="" />

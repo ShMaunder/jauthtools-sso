@@ -241,7 +241,7 @@ class SSOManagerController extends JController
 		JToolBarHelper::save();
 		JToolBarHelper::cancel( 'cancel', 'Close' );
 		$dbo =& JFactory::getDBO();
-		$dbo->setQuery('SELECT id FROM #__plugins WHERE folder = "system" AND element = "sso"');
+		$dbo->setQuery('SELECT extension_id id FROM #__extensions WHERE folder = "system" AND element = "sso"');
 		$result = $dbo->loadResult();
 		if($result) {
 	    	JRequest::setVar('cid',$result);
@@ -286,11 +286,11 @@ class SSOManagerController extends JController
 				$table = '#__sso_providers';
 				break;
 			default:
-				$table = '#__plugins';
+				$table = '#__extensions';
 				break;
 		}
-		$query = 'UPDATE '. $table .' SET published = '.(int) $publish
-			. ' WHERE id IN ( '.$cids.' )'
+		$query = 'UPDATE '. $table .' SET state = '.(int) $publish
+			. ' WHERE extension_id IN ( '.$cids.' )'
 			;
 		$db->setQuery( $query );
 		if (!$db->query()) {

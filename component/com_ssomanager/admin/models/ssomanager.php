@@ -32,15 +32,15 @@ class ssomanagermodelSSOmanager extends JModel {
 	function getList() {
 		$dbo =& JFactory::getDBO();
 		
-		$query  = 'SELECT p.name AS name, p.published AS published, sp.filename AS type, p.ordering AS ordering, p.id AS id ';
+		$query  = 'SELECT p.name AS name, p.state AS state, sp.filename AS type, p.ordering AS ordering, p.extension_id AS id ';
 		switch($this->_mode) {
 			case 'A':
 			case 'C':
 			case 'BG':
-				$query .= ' FROM #__sso_plugins AS sp LEFT JOIN #__plugins AS p on sp.plugin_id = p.id';
+				$query .= ' FROM #__sso_plugins AS sp LEFT JOIN #__extensions AS p on sp.extension_id = p.extension_id';
 				break;
 			case 'B':
-				$query .= ' FROM #__sso_providers AS p LEFT JOIN #__sso_plugins AS sp ON p.plugin_id = sp.plugin_id';
+				$query .= ' FROM #__sso_providers AS p LEFT JOIN #__sso_plugins AS sp ON p.extension_id = sp.extension_id';
 				break;
 		}
 		
@@ -70,13 +70,13 @@ class ssomanagermodelSSOmanager extends JModel {
 	
 	function refreshPlugins() {
 		$dbo =& JFactory::getDBO();	
-		$query = 'INSERT INTO #__sso_plugins (plugin_id,filename) SELECT `id`,`element` FROM #__plugins WHERE `id` NOT IN (SELECT `plugin_id` FROM #__sso_plugins) AND `folder` = "sso"';
+		$query = 'INSERT INTO #__sso_plugins (extension_id,filename) SELECT `extension_id`,`element` FROM #__extensions WHERE `extension_id` NOT IN (SELECT `extension_id` FROM #__sso_plugins) AND `folder` = "sso"';
 		$dbo->setQuery($query);
 		$results = $dbo->Query();
-		$query = 'DELETE FROM #__sso_plugins WHERE plugin_id NOT IN (SELECT id FROM #__plugins WHERE folder = "sso")';
+		$query = 'DELETE FROM #__sso_plugins WHERE extension_id NOT IN (SELECT extension_id FROM #__extensions WHERE folder = "sso")';
 		$dbo->setQuery($query);
 		$dbo->Query();
-		$query = 'SELECT plugin_id FROM #__sso_plugins';
+		$query = 'SELECT extension_id FROM #__sso_plugins';
 		$dbo->setQuery($query);
 		$results = $dbo->loadResultArray();
 		$result = Array();
@@ -102,15 +102,15 @@ class ssomanagermodelSSOmanager extends JModel {
 	function loadData($index) {
 		if($index) {
 			$dbo =& JFactory::getDBO();
-			$query  = 'SELECT p.name AS name, p.published AS published, sp.filename AS type, p.ordering AS ordering, p.id AS id, p.params AS params ';
+			$query  = 'SELECT p.name AS name, p.state AS state, sp.filename AS type, p.ordering AS ordering, p.id AS id, p.params AS params ';
 			switch($this->_mode) {
 				case 'A':
 				case 'C':
 				case 'BG':
-					$query .= ' FROM #__sso_plugins AS sp LEFT JOIN #__plugins AS p on sp.plugin_id = p.id';
+					$query .= ' FROM #__sso_plugins AS sp LEFT JOIN #__extensions AS p on sp.extension_id = p.id';
 					break;
 				case 'B':
-					$query .= ' FROM #__sso_providers AS p LEFT JOIN #__sso_plugins AS sp ON p.plugin_id = sp.plugin_id';
+					$query .= ' FROM #__sso_providers AS p LEFT JOIN #__sso_plugins AS sp ON p.extension_id = sp.extension_id';
 					break;
 			}
 			$query .= ' WHERE sp.type = "'. $this->_mode .'" AND p.id = '. $index;
@@ -121,7 +121,7 @@ class ssomanagermodelSSOmanager extends JModel {
 			$this->_data = new stdClass();
 			$type = JRequest::getVar('type','');
 			$this->_data->name = 'New '. $type .' plugin';
-			$this->_data->published = 0;
+			$this->_data->state = 0;
 			$this->_data->type = $type;
 			$this->_data->ordering = 999;
 			$this->_data->id = 0;
@@ -137,10 +137,10 @@ class ssomanagermodelSSOmanager extends JModel {
 			case 'A':
 			case 'C':
 			case 'BG':
-				// type A or C plugins use the #__plugins table to store data
+				// type A or C plugins use the #__extensions table to store data
 				// type BG is the type B global params
 				// TODO: type B plugin non-instance params are global, so need to set this appropriately
-				$row =& JTable::getInstance('plugin');
+				$row =& JTable::getInstance('extension');
 				$id = JRequest::getVar('cid',0);
 				$row->load($id);
 				
@@ -148,7 +148,7 @@ class ssomanagermodelSSOmanager extends JModel {
 				JRequest::checkToken() or jexit( 'Invalid Token' );
 		
 				$db   =& JFactory::getDBO();
-				$row  =& JTable::getInstance('plugin');
+				$row  =& JTable::getInstance('extension');
 		
 				$client = JRequest::getWord( 'filter_client', 'site' );
 		

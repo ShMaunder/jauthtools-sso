@@ -20,7 +20,7 @@ jimport('joomla.database.table');
  */
 class JTableSSOProvider extends JTable {
 	var $id = null;
-	var $plugin_id = null;
+	var $extension_id = null;
 	var $key = null;
 	var $name = null;
 	var $description = null;
@@ -32,7 +32,7 @@ class JTableSSOProvider extends JTable {
 	var $_language = null;
 	var $status = null;
 	var $remotestatus = null;
-	var $published = null;
+	var $state = null;
 	var $trusted = null;
 	var $params = '';
 	var $ordering = 0;
@@ -43,9 +43,9 @@ class JTableSSOProvider extends JTable {
     }
 
     function &getPlugin() {
-    	if($this->plugin_id && !$this->_plugin) {
-    		$this->_plugin =& JTable::getInstance('plugin');
-    		$this->_plugin->load($this->plugin_id);
+    	if($this->extension_id && !$this->_plugin) {
+    		$this->_plugin =& JTable::getInstance('extension');
+    		$this->_plugin->load($this->extension_id);
     	} else {
     		print_r($this);
     		die('no plugin ID and a valid plugin!');
@@ -65,7 +65,7 @@ class JTableSSOProvider extends JTable {
 	}*/
 
 	function init_record() {
-		$this->published = '1';
+		$this->state = '1';
 		$this->trusted = '0';
 	}
 
@@ -166,7 +166,7 @@ class JTableSSOProvider extends JTable {
 		
 		$cids = "'" . implode("','", $cid) . "'";
 		$database->setQuery(
-		   "UPDATE #__sso_providers SET published='$publish' " .
+		   "UPDATE #__sso_providers SET state ='$publish' " .
 		   "WHERE providerId IN ($cids)");
 		
 		if (!$database->query()) {
@@ -306,4 +306,3 @@ class JTableSSOProvider extends JTable {
 	}
 }
 
-?>

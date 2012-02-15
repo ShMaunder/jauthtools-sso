@@ -25,14 +25,14 @@ jimport('joomla.database.table');
  * SSO Plugins
  */
 class JTableSSOPlugin extends JTable {
-	var $plugin_id = 0;
+	var $extension_id = 0;
 	var $filename = '';
 	var $type = 'A';
 	var $key = '';
 	var $cache = '';
 	
 	function __construct(&$db) {
-		parent::__construct('#__sso_plugins', 'plugin_id', $db);
+		parent::__construct('#__sso_plugins', 'extension_id', $db);
 	}
 	
 	

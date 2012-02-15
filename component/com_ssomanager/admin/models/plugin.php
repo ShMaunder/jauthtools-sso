@@ -25,8 +25,8 @@ class ssomanagermodelPlugin extends JModel {
 	function getList() {
 		if(!$this->_data) {
 			$dbo =& JFactory::getDBO();
-			$query  = 'SELECT p.name AS name, p.published AS published, sp.type AS type, p.ordering AS ordering, p.id AS id, p.params AS params ';
-			$query .= ' FROM #__plugins AS p LEFT JOIN #__sso_plugins AS sp on sp.plugin_id = p.id';
+			$query  = 'SELECT p.name AS name, p.state AS state, sp.type AS type, p.ordering AS ordering, p.extension_id AS id, p.params AS params ';
+			$query .= ' FROM #__extensions AS p LEFT JOIN #__sso_plugins AS sp on sp.extension_id = p.id';
 			$mode = $this->getMode();
 			if($mode) {
 				$query .= ' WHERE folder = "'. $mode .'"';
@@ -52,7 +52,7 @@ class ssomanagermodelPlugin extends JModel {
 
     function store() {
 		$db   =& JFactory::getDBO();
-		$row  =& JTable::getInstance('plugin');
+		$row  =& JTable::getInstance('extension');
 		$mode = $this->getMode();
 
 		if (!$row->bind(JRequest::get('post'))) {

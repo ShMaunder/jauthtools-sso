@@ -59,7 +59,7 @@
 				<?php echo JText::_( 'Published' ); ?>:
 			</td>
 			<td>
-				<?php echo $this->lists['published']; ?>
+				<?php echo $this->lists['state']; ?>
 			</td>
 		</tr>
 		<tr>

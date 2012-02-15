@@ -45,7 +45,7 @@ class ssomanagerviewList extends JView {
 				$item->type = 'Type C - Redirected Login SSO Plugin';
 				break;
 		}
-		$item->published  = JHtml::_('grid.published', $item, $index);
+		$item->state = JHtml::_('grid.published', $item, $index);
 		$item->cb = '<input type="checkbox" id="cb'. $index.'" onclick="isChecked(this.checked);" value="'. $item->id .'" name="cid[]"/>';
 		$this->assignRef('item',$item);
 	}

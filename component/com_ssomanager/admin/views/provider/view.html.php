@@ -50,9 +50,9 @@ class ssomanagerviewProvider extends JView {
 		
 		
 		if(!$cid[0]) {
-			$plugin_id = JRequest::getInt('plugin_id',0);
-			if($plugin_id) {
-				$row->plugin_id = $plugin_id;
+			$extension_id = JRequest::getInt('extension_id',0);
+			if($extension_id) {
+				$row->extension_id = $extension_id;
 			} else {
 				// REALLY REALLY REALLY shouldn't do this here
 				$app =& JFactory::getApplication();
@@ -77,7 +77,7 @@ class ssomanagerviewProvider extends JView {
 				// build the html select list for ordering
 				$query = 'SELECT ordering AS value, name AS text'
 					. ' FROM #__sso_providers'
-					. ' WHERE published > 0'
+					. ' WHERE state > 0'
 					. ' AND ordering > -10000'
 					. ' AND ordering < 10000'
 					. ' ORDER BY ordering'
@@ -91,14 +91,14 @@ class ssomanagerviewProvider extends JView {
 		} else {
 			$row->folder 		= '';
 			$row->ordering 		= 999;
-			$row->published 	= 1;
+			$row->state		= 1;
 			$row->description 	= '';
 			// Fudge this, its technically wrong but it'll evaluate to zero and then normality will take over
 			$lists['ordering'] = '<input type="hidden" name="ordering" value="'. $row->ordering .'" />'. JText::_( 'This plugin cannot be reordered' );
 			
 		}
 
-		$lists['published'] = JHTML::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
+		$lists['status'] = JHTML::_('select.booleanlist',  'status', 'class="inputbox"', $row->status);
 
 		// get params definitions
 		$params = new JParameter( $row->params, JApplicationHelper::getPath( 'plg_xml', 'sso'.DS.$plugin->element ), 'plugin' );

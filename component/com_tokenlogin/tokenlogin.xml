@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<install type="component" version="1.5.0">
+<extension type="component" version="2.5">
   <name>Token Login</name>
   <author>Sam Moffatt</author>
   <creationDate>November 2008</creationDate>
-  <copyright>(C) 2009 Sam Moffatt</copyright>
+  <copyright>(C) 2012 Sam Moffatt</copyright>
   <license>GNU GPLv2</license>
   <authorEmail>pasamio@gmail.com</authorEmail>
   <authorUrl>http://sammoffatt.com.au</authorUrl>
-  <version>1.5.5</version>
+  <version>2.5.0</version>
   <description>Token Login enables users to log into their sites using tokens issued by the systems. Tokens remain valid for a number of login or attempts or until they expire, which ever comes first. Token Login comes with a library that can be used by thrid party developers to issue tokens and then have this system log the user in automatically and redirect them to the correct location.</description>
   <files folder="site">
     <file>index.html</file>
@@ -26,7 +26,7 @@
 			<file driver="mysql" charset="utf8">sql/uninstall.sql</file>
 			<file driver="mysql">sql/uninstall.sql</file>
 		</sql>
-	</uninstall>  
+	</uninstall>
   <administration>
     <files folder="admin">
       <file>controller.php</file>
@@ -49,5 +49,5 @@
     </files>
     <menu admin_menu_link="option=com_tokenlogin" admin_menu_alt="Token Login" admin_menu_img="js/ThemeOffice/component.png">Token Login</menu>
   </administration>
-  <params/>
-</install>
+  <fields/>
+</extension>

@@ -29,7 +29,7 @@ $count 	= count($this->plugins);
 for ($i=0; $i < $count; $i++) {
 	$row = &$this->plugins[$i];
 	if($row->type == 'B') {
-		$link = 'index.php?option=com_ssomanager&amp;task=edit&amp;mode=serviceprovider&amp;plugin_id='. $row->id;
+		$link = 'index.php?option=com_ssomanager&amp;task=edit&amp;mode=serviceprovider&amp;extension_id='. $row->id;
 		if (!$k) {
 			?>
 			<tr class="<?php echo "row$x"; ?>" valign="top">

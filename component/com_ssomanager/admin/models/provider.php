@@ -25,8 +25,8 @@ class ssomanagermodelProvider extends JModel {
 	function getList() {
 		if(!$this->_data) {
 			$dbo =& JFactory::getDBO();
-			$query  = 'SELECT p.name AS name, p.published AS published, sp.filename AS type, p.ordering AS ordering, p.id AS id, p.params AS params ';
-			$query .= ' FROM #__sso_providers AS p LEFT JOIN #__sso_plugins AS sp ON p.plugin_id = sp.plugin_id';
+			$query  = 'SELECT p.name AS name, p.state AS state, sp.filename AS type, p.ordering AS ordering, p.id AS id, p.params AS params ';
+			$query .= ' FROM #__sso_providers AS p LEFT JOIN #__sso_plugins AS sp ON p.extension_id = sp.extension_id';
 			$dbo->setQuery($query);
 			$this->_data = $dbo->loadObjectList();
 		}
