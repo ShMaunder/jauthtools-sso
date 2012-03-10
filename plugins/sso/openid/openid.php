@@ -1,26 +1,35 @@
 <?php
+
+defined('_JEXEC') or die();
 jimport('joomla.plugin.plugin');
 
+/**
+ * OpenID SSO Plugin
+ *
+ * @package     JAuthTools
+ * @subpackage  SSO
+ */
 class plgSSOOpenid extends JPlugin {
 	/**
-	 * Constructor
+	 * Get the SSO Plugin Type
 	 *
-	 * For php4 compatability we must not use the __constructor as a constructor for plugins
-	 * because func_get_args ( void ) returns a copy of all passed arguments NOT references.
-	 * This causes problems with cross-referencing necessary for the observer design pattern.
+	 * @return  string  The type of the plugin.
 	 *
-	 * @param object $subject The object to observe
-	 * @since 1.5
+	 * @since   1.5.0
 	 */
-	function plgSSOOpenid(& $subject, $params) {
-		parent :: __construct($subject, $params);
-	}
-
-	function getSSOPluginType() {
+	public function getSSOPluginType() {
 		return 'C';
 	}
 
-	function detectRemoteUser() {
+	/**
+	 * Detect the remote user via OpenID
+	 * Note: as this is a type C plugin then the user will be redirected.
+	 *
+	 * @return  string  The detected user.
+	 *
+	 * @since   1.5.0
+	 */
+	public function detectRemoteUser() {
 		$mainframe = & JFactory :: getApplication();
 
 		$this->_detectRandom();
