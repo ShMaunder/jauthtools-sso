@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_SSOMANAGER_LIST_VIEW_DEFAULT_TITLE" option="COM_SSOMANAGER_LIST_VIEW_DEFAULT_OPTION">
+		<message>
+			<![CDATA[COM_SSOMANAGER_LIST_VIEW_DEFAULT_DESC]]>
+		</message>
+	</layout>
+
+	<!-- Add fields to the request variables for the layout. -->
+	<!--
+	<fields name="request">
+		<fieldset name="request" label="COM_SSOMANAGER_FIELDSET_OPTIONAL_LABEL">
+		</fieldset>
+	</fields>
+	-->
+	
+	<!-- Add fields to the parameters object for the layout. -->	
+	<fields name="params">
+
+		<!-- Basic options. -->
+		<!--
+		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL">
+		</fieldset>
+		-->
+	</fields>
+</metadata>

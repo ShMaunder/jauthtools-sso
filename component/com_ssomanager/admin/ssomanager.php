@@ -17,6 +17,7 @@
 // no direct access
 defined('_JEXEC') or die('No direct access allowed ;)');
 
+// load up the controller
 jimport('joomla.application.component.controller');
 
 // Grab an instance of the controller

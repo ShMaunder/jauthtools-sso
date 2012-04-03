@@ -1,33 +1,36 @@
 <?php
 /**
- * Document Description
+ * SSO Manager Component Main Controller
  * 
- * Document Long Description 
- * 
- * PHP4/5
+ * PHP5
  *  
  * Created on Sep 28, 2007
  * 
- * @package JLibMan
- * @author Sam Moffatt <pasamio@gmail.com>
- * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2009 Sam Moffatt 
- * @version SVN: $Id:$
+ * @package    JAuthTools.SSO
+ * @subpackage com_ssomanager 
+ * @author     Sam Moffatt <pasamio@gmail.com>
+ * @license    GNU/GPL http://www.gnu.org/licenses/gpl.html
+ * @copyright  2012 (C) Sam Moffatt 
  */
  
  // no direct access
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 jimport('joomla.application.component.controller');
 
 /**
- * JLibMan Component Controller
- *
- * @package    JLibMan
+ * SSO Manager Component Controller
+ * @package     JAuthTools.SSO
+ * @subpackage  com_ssomanager
+ * @since       1.5
  */
 class SSOManagerController extends JController
 {
+	/**
+	 * Constructor!
+	 *
+	 * @since  1.5
+	 */
 	function __construct() {
 		parent::__construct();
 		$this->registerTask('new', 'newprovider');
@@ -37,9 +40,11 @@ class SSOManagerController extends JController
     /**
      * Method to display the view
      *
-     * @access    public
+     * @return  void
+     *
+     * @since   1.5
      */
-    function display()
+    public function display()
     {
     	switch($this->getTask()) {
     		case 'cancel':
@@ -51,8 +56,15 @@ class SSOManagerController extends JController
     			break;
     	}
     }
-    
-    function entries() {
+   
+    /**
+     * Get the entries in a list view.
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */
+    public function entries() {
     	$mode = $this->getMode();
     	$this->setToolbarFromMode($mode);
     	$model =& $this->getModelFromMode($mode);
@@ -62,14 +74,30 @@ class SSOManagerController extends JController
     	$view->display();
     }
     
-    function refresh() {
+    /**
+     * Refresh the configuration and reload the page.
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */
+    public function refresh() {
     	$model =& $this->getModel();
     	$mode = $this->getMode();
     	$count = $model->refreshPlugins();
     	$this->setRedirect('index.php?option=com_ssomanager&task=configuration',JText::sprintf('Refreshed %d plugins successfully and failed to update %d plugins', $count['success'], $count['failure']));
     }
     
-    function listView($mode='A') {
+    /**
+     * Display a list view
+     *
+     * @param  string  $mode  The mode list to display (A, B, BG, C)
+     *
+     * @return void
+     *
+     * @since  1.5
+     */
+    public function listView($mode='A') {
     	JRequest::setVar('task', 'type'.$mode);
     	JToolbarHelper::title(JText::sprintf('SSO - Type %s plugins', ucfirst($mode)));
     	if($mode == 'B') {
@@ -87,7 +115,14 @@ class SSOManagerController extends JController
     	$view->display();
     }
     
-    function edit() {
+    /**
+     * Edit view
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */
+    public function edit() {
     	JToolBarHelper::title( JText::_( 'SSO' ) .': <small><small>[' .JText::_('Edit'). ']</small></small>', 'plugin.png' );
 		JToolBarHelper::save();
 		JToolBarHelper::cancel( 'cancel', 'Close' );
@@ -99,8 +134,15 @@ class SSOManagerController extends JController
     	$view->setLayout('form');
     	$view->display();
     }
-    
-    function save() {
+   
+    /**
+     * Save the data and redirect back to the original view.
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */ 
+    public function save() {
     	// Check for request forgeries
 		JRequest::checkToken() or jexit( 'Invalid Token' );
     	$mode = $this->getMode();
@@ -123,8 +165,17 @@ class SSOManagerController extends JController
     	}
     	$this->setRedirect($link, $msg);
     }
-    
-    function &getModelFromMode($mode) {
+   
+    /**
+     * Get the model for this request from the mode.
+     *
+     * @param   string  $mode  The mode to use (e.g. sso, user, usersource, etc).
+     *
+     * @return  JModel  An instance of the model to use for this request.
+     *
+     * @since   1.5
+     */ 
+    protected function &getModelFromMode($mode) {
         switch($mode) {
     		case 'sso':
     		case 'identityprovider':
@@ -132,7 +183,7 @@ class SSOManagerController extends JController
     		case 'usersource':
     		case 'authentication':   
     		case 'config': // config is a special instance of the System - SSO plugin 			
-    			$model =& $this->getModel('plugin');
+    			$model =& $this->getModel('list');
     			break;
     		case 'serviceprovider':
     			$model =& $this->getModel('provider');
@@ -144,7 +195,16 @@ class SSOManagerController extends JController
     	return $model;
     }
     
-    function &getViewFromMode($mode) {
+    /**
+     * Get the view for this request from the mode.
+     *
+     * @param   string  $mode  The mode to use (e.g. sso, user, usersource, etc).
+     *
+     * @return  JView  An instance of the view to use for this request.
+     *
+     * @since   1.5
+     */
+    protected function &getViewFromMode($mode) {
     	switch($mode) {
     		case 'sso':
     		case 'identityprovider':
@@ -162,7 +222,16 @@ class SSOManagerController extends JController
     	return $view;
     }
     
-    function getNameFromMode($mode) {
+    /** 
+     * Method to map textual name to descriptive name for display.
+     *
+     * @param   string  $mode  The mode to use (e.g. sso, user, user source, etc).
+     *
+     * @return  string  The friendly name for the mode type.
+     *
+     * @since   1.5
+     */
+    protected function getNameFromMode($mode) {
     	switch($mode) {
     		case 'identityprovider':
     			return 'Identity Providers';
@@ -189,8 +258,17 @@ class SSOManagerController extends JController
     			break;
     	}	
     }
-    
-    function setToolbarFromMode($mode) {
+   
+    /**
+     * Setup the Joomla! toolbar based on the given mode.
+     *
+     * @param   string  $mode  The mode to configure based upon (e.g. sso, user, user source, etc).
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */
+    protected function setToolbarFromMode($mode) {
     	switch($mode) {
     		case 'serviceprovider':
     			JToolbarHelper::addNew('new');
@@ -207,7 +285,14 @@ class SSOManagerController extends JController
     	}
     }
     
-    function remove() {
+    /**
+     * Remove an item and redirect back to the entry page.
+     *
+     * @return  boolean  The result of the operation.
+     *
+     * @since   1.5
+     */
+    public function remove() {
     	$mode = JRequest::getVar('mode','');
     	$model =& $this->getModelFromMode($mode);
     	if(!$model) {
@@ -223,7 +308,14 @@ class SSOManagerController extends JController
     	return true;
     }
     
-    function getMode() {
+    /**
+     * Get the mode from the request.
+     *
+     * @return  string  The mode.
+     *
+     * @since   1.5
+     */
+    public function getMode() {
     	static $mode = null;
     	if($mode === null) {
     		$mode = JRequest::getVar('mode','');
@@ -234,10 +326,19 @@ class SSOManagerController extends JController
     	return $mode;
     }
     
-    function configuration() {
+    /** 
+     * Display the configuration screen.
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */
+    public function configuration() {
     	JHtml::stylesheet('toolbar.css', 'administrator/components/com_ssomanager/media/css/');
     	JToolbarHelper::title(JText::_('SSO Manager'). ' - '.  JText::_('Configuration'));
     	JToolBarHelper::custom( 'refresh', 'refresh', 'refresh','Refresh Plugin List',false,false);
+		parent::display();
+    	/*
 		JToolBarHelper::save();
 		JToolBarHelper::cancel( 'cancel', 'Close' );
 		$dbo =& JFactory::getDBO();
@@ -249,14 +350,22 @@ class SSOManagerController extends JController
 	    	$model =& $this->getModel('plugin');
 	    	$view =& $this->getView('plugin','html');
 	    	$view->setModel( $model, true);
-	    	$view->setLayout('form');
-	    	$view->display();
+	    	$view->setLayout('edit');
+	    	$view->display();	
 		} else {
 			parent::display();
 		}
+		*/
     }
     
-	function publish( )
+    /**
+     * Publish an item from a model.
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */
+	public function publish( )
 	{
 		// Check for request forgeries
 		JRequest::checkToken() or jexit( 'Invalid Token' );
@@ -300,7 +409,14 @@ class SSOManagerController extends JController
 		$this->setRedirect( 'index.php?option=com_ssomanager&task=entries&mode='. $mode );
 	}
     
-    function newprovider() {
+    /** 
+     * Create a new SSO provider.
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */
+    public function newprovider() {
     	$view =& $this->getView('selecttype', 'html');
     	JRequest::setVar('mode', 'sso');
     	$model =& $this->getModel('plugin');

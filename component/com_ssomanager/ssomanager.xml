@@ -33,11 +33,13 @@
 	<administration>
 		<files folder="admin">
 			<file>controller.php</file>
+			<file>controllers/plugin.php</file>
 			<file>index.html</file>
 			<file>media/css/toolbar.css</file>
 			<file>media/images/icon-32-refresh.png</file>
 			<file>models/index.html</file>
 			<file>models/plugin.php</file>
+			<file>models/list.php</file>
 			<file>models/provider.php</file>
 			<file>models/ssomanager.php</file>
 			<file>sql/index.html</file>
@@ -59,7 +61,9 @@
 			<file>views/picker/tmpl/index.html</file>
 			<file>views/picker/view.html.php</file>
 			<file>views/plugin/index.html</file>
-			<file>views/plugin/tmpl/form.php</file>
+			<!--<file>views/plugin/tmpl/form.php</file>-->
+			<file>views/plugin/tmpl/edit.php</file>
+			<file>views/plugin/tmpl/edit_options.php</file>
 			<file>views/plugin/tmpl/index.html</file>
 			<file>views/plugin/view.html.php</file>
 			<file>views/provider/index.html</file>
