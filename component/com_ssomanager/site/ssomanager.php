@@ -20,25 +20,9 @@
 // no direct access
 defined('_JEXEC') or die('No direct access allowed ;)');
 
-// Require the base controller
-require_once( JPATH_COMPONENT.DS.'controller.php' );
+jimport('joomla.application.component.controller');
 
-//require_once (JApplicationHelper::getPath('admin_html'));
-//require_once (JApplicationHelper::getPath('class'));
-
-// Require specific controller if requested
-if($controller = JRequest::getWord('controller')) {
-    $path = JPATH_COMPONENT.DS.'controllers'.DS.$controller.'.php';
-    if (file_exists($path)) {
-        require_once $path;
-    } else {
-        $controller = '';
-    }
-}
-
-// Create the controller
-$classname    = 'SSOManagerController'.$controller;
-$controller   = new $classname( );
+$controller = JController::getInstance('SSOManager');
 
 // Perform the Request task
 $controller->execute( JRequest::getVar( 'task' ) );

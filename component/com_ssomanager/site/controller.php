@@ -1,18 +1,16 @@
 <?php
 /**
- * Document Description
+ * SSO Manager Site Controller
  *
- * Document Long Description
- *
- * PHP4/5
+ * PHP5
  *
  * Created on Sep 28, 2007
  *
- * @package JLibMan
- * @author Sam Moffatt <pasamio@gmail.com>
- * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2009 Sam Moffatt
- * @version SVN: $Id:$
+ * @package     JAuthTools.SSO
+ * @subpackage  com_ssomanager
+ * @author      Sam Moffatt <pasamio@gmail.com>
+ * @license     GNU/GPL http://www.gnu.org/licenses/gpl.html
+ * @copyright   2012 (C) Sam Moffatt
  */
 
 // no direct access
@@ -24,18 +22,21 @@ jimport('jauthtools.sso');
 jimport('jauthtools.usersource');
 
 /**
- * JLibMan Component Controller
- *
- * @package    JLibMan
+ * SSO Manager Site Controller
+ * @package     JAuthTools.SSO
+ * @subpackage  com_ssomanager
+ * @since       1.5
  */
 class SSOManagerController extends JController
 {
 	/**
 	 * Method to display the view
 	 *
-	 * @access    public
+	 * @return  void
+	 *
+	 * @since   1.5
 	 */
-	function display()
+	public function display()
 	{
 		$plugin = JRequest::getVar('plugin', '');
 		$model =& $this->getModel();
@@ -67,10 +68,20 @@ class SSOManagerController extends JController
 		}
 	}
 
-	function delegate() {
+	/**
+	 * Handle delegated authentication.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.5
+	 */
+	public function delegate() {
+		// check if the System SSO plugin is enabled 
 		$plugin = JPluginHelper::getPlugin('system','sso');
-		
 		if($plugin) {
+			// if the plugin is available, redirect to the site homepage
+			// the plugin will have handled the delegated auth already
+			// and we'll just create a mess
 			$this->setRedirect('index.php');
 			return true;
 		}
@@ -101,7 +112,10 @@ class SSOManagerController extends JController
 
 			// Try to authenticate remote user
 			$username = $plugin->detectRemoteUser();
-			$autocreate = 0; // TODO: Unfudge this so that it gets it off a param somewhere
+			
+			
+			// TODO: Unfudge this so that it gets it off a param somewhere
+			$autocreate = 0; 
 			// If authentication is successful log them in
 			if (!empty($username)) {
 				if($autocreate) {
@@ -114,18 +128,25 @@ class SSOManagerController extends JController
 			JError::raiseError(500, JText::_('No plugin specified'));
 			return false;
 		}
-		if($before != $user->id) { // user id changed
+		if($before != $user->id) 
+		{ 
+			// user id changed
 			$app =& JFactory::getApplication();
 			$uri =& JFactory::getURI();
 			//$nextHop = $params->get('nexthop',false);
 			$nextHop = false;
 			
-			if($nextHop) { // redirect to the next hop location
+			if($nextHop) 
+			{ 
+				// redirect to the next hop location
 				$app->redirect(getLinkFromItemID($nextHop));
-			} else { // redirect back to the same page
+			} else 
+			{ 
+				// redirect back to the same page
 				$app->redirect($uri->toString());
 			}
-		} else {
+		} else 
+		{
 			if($document->getType() == 'html') '<p>'.JText::_('No user detected') .'</p>';
 		}
 	}

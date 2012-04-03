@@ -27,6 +27,7 @@
 		<file>models/ssomanager.php</file>
 		<file>ssomanager.php</file>
 		<file>views/list/tmpl/default.php</file>
+		<file>views/list/tmpl/default.xml</file>
 		<file>views/list/view.html.php</file>
 	</files>
 	<administration>
