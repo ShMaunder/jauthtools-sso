@@ -19,9 +19,26 @@
  
 jimport('joomla.application.component.model');
 
-class ssomanagermodelProvider extends JModel {
-	var $_data = null;
+/**
+ * SSO Manager Provider (Type B) Model
+ * @package     JAuthTools.SSO
+ * @subpackage  com_ssomanager
+ * @since       1.5
+ */
+class SSOManagerModelProvider extends JModel {
+	/**
+	 * @var    array  List of providers.
+	 * @since  1.5
+	 */
+	private $_data = null;
 	
+	/**
+	 * Get a list of SSO providers.
+	 *
+	 * @return  array  List of providers.
+	 *
+	 * @since   1.5
+	 */
 	function getList() {
 		if(!$this->_data) {
 			$dbo =& JFactory::getDBO();
@@ -32,17 +49,31 @@ class ssomanagermodelProvider extends JModel {
 		}
 		return $this->_data;
 	}
-	
-	// TODO: Change the way that this behaves
-    function getMode() {
+
+	/**
+	 * Get the mode.
+	 *
+	 * @return  string  The mode of the request (e.g. A, B, BG or C)
+	 *
+	 * @since   1.5
+	 */	
+    public function getMode() {
+		// TODO: Change the way that this behaves
     	static $mode = null;
     	if($mode === null) {
     		$mode = JRequest::getVar('mode','');
     	}
     	return $mode;
     }	
-    
-	function store() {
+   
+	/**
+	 * Store the SSO provider instance.
+	 *
+	 * @return  boolean  The result of the store operation.
+	 *
+	 * @since   1.5
+	 */ 
+	public function store() {
 		$row =& JTable::getInstance('ssoprovider');
 		if (!$row->bind(JRequest::get('post'))) {
 			JError::raiseError(500, $row->getError() );
@@ -55,8 +86,15 @@ class ssomanagermodelProvider extends JModel {
 		}
 		return true;
     }
-    
-    function delete($cid) {
+
+    /**
+     * Delete this SSO provider instance.
+     *
+     * @return  boolean  The result of the delete operation.
+     *
+     * @since   1.5
+     */
+    public function delete($cid) {
     	if(!is_array($cid)) {
     		$cid = Array($cid);
     	}

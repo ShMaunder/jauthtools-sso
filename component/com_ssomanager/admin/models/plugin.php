@@ -18,11 +18,28 @@
  
 jimport('joomla.application.component.models');
 
- 
-class ssomanagermodelPlugin extends JModel {
-	var $_data = null;
-	
-	function getList() {
+/**
+ * SSO Manager Plugin model.
+ * Used when managing a plugin.
+ * @package     JAuthTools.SSO
+ * @subpackage  com_ssomanager
+ * @since       1.5
+ */
+class SSOManagerModelPlugin extends JModel {
+	/**
+	 * @var    The model data.
+	 * @since  1.5
+	 */
+	private $_data = null;
+
+	/**
+	 * Get the list of plugins.
+	 *
+	 * @return  array  The plugin list.
+	 *
+	 * @since   1.5
+	 */
+	public function getList() {
 		if(!$this->_data) {
 			$dbo =& JFactory::getDBO();
 			$query  = 'SELECT p.name AS name, p.state AS state, sp.type AS type, p.ordering AS ordering, p.extension_id AS id, p.params AS params ';
@@ -36,13 +53,16 @@ class ssomanagermodelPlugin extends JModel {
 		}
 		return $this->_data;
 	}
-	
-	function getItem($index) {
-		// TODO: Fill with plugin load code
-	}
-		
-	// TODO: Change the way that this behaves
-    function getMode() {
+
+	/**
+	 * Get the mode that this model is operating within.
+	 *
+	 * @return  string  The mode (e.g. A, B, BG or C)
+	 *
+	 * @since   1.5
+	 */
+    public function getMode() {
+		// TODO: Change the way that this behaves
     	static $mode = null;
     	if($mode === null) {
     		$mode = JRequest::getVar('mode','');
@@ -50,7 +70,14 @@ class ssomanagermodelPlugin extends JModel {
     	return $mode;
     }
 
-    function store() {
+	/**
+	 * Store the plugin details.
+	 *
+	 * @return  boolean  Result of operation.
+	 *
+	 * @since   1.5
+	 */
+    public function store() {
 		$db   =& JFactory::getDBO();
 		$row  =& JTable::getInstance('extension');
 		$mode = $this->getMode();
@@ -69,7 +96,15 @@ class ssomanagermodelPlugin extends JModel {
 		return true;
     }
     
-    function delete() {
+    /**
+     * Deleting a plugin from the interface.
+     * TODO: If this isn't supported, need to work out why this is here.
+     *
+     * @return  void
+     *
+     * @since   1.5
+     */
+    public function delete() {
     	JError::raiseError(500, 'Plugins cannot be deleted through this interface');
     }
 }

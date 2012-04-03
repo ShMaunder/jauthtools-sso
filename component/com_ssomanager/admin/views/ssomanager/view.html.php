@@ -1,19 +1,16 @@
 <?php
 /**
- * Document Description
+ * Default SSO Manager View
  * 
- * Document Long Description 
- * 
- * PHP4/5
+ * PHP5
  *  
  * Created on Dec 5, 2008
  * 
- * @package package_name
- * @author Sam Moffatt <pasamio@gmail.com>
- * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2009 Sam Moffatt 
- * @version SVN: $Id:$
- * @see http://joomlacode.org/gf/project/   JoomlaCode Project:    
+ * @package     JAuthTools.SSO
+ * @subpackage  com_ssomanager
+ * @author      Sam Moffatt <pasamio@gmail.com>
+ * @license     GNU/GPL http://www.gnu.org/licenses/gpl.html
+ * @copyright   2012 (C) Sam Moffatt 
  */
  
 // Check to ensure this file is included in Joomla!
@@ -21,11 +18,6 @@ defined('_JEXEC') or die( 'Restricted access' );
 
 jimport('joomla.application.component.view');
  
-class ssomanagerviewSSOmanager extends JView {
-	
-/*
-	function display($tpl=null) {
-		parent::display($tpl);
-	}
-*/
+class SSOManagerViewSSOmanager extends JView {
+    // defer to the parent
 }

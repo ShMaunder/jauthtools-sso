@@ -25,11 +25,33 @@ jimport( 'joomla.filesystem.file');
 jimport( 'joomla.filesystem.folder');
 jimport( 'jauthtools.sso' );
 
-class ssomanagermodelSSOmanager extends JModel {
-	var $_mode = 'A';
-	var $_data; 
+/**
+ * Core SSO Manager model
+ * @package     JAuthTools.SSO
+ * @subpackage  com_ssomanager
+ * @since       1.5
+ */
+class SSOManagerModelSSOManager extends JModel {
+	/**
+	 * @var    string  Mode for the SSO Manager plugin type (e.g. A, B or C)
+	 * @since  1.5
+	 */
+	private $_mode = 'A';
+
+	/**
+	 * @var    string  Data
+	 * @since  1.5
+	 */	
+	private $_data; 
 	
-	function getList() {
+	/**
+	 * Get the list of plugins
+	 *
+	 * @return  array  List of plugins
+	 *
+	 * @since   1.5
+	 */
+	public function getList() {
 		$dbo =& JFactory::getDBO();
 		
 		$query  = 'SELECT p.name AS name, p.state AS state, sp.filename AS type, p.ordering AS ordering, p.extension_id AS id ';
@@ -60,14 +82,37 @@ class ssomanagermodelSSOmanager extends JModel {
 		return $res;
 	}
 	
-	function setMode($mode) {
+	/** 
+	 * Set the mode for this model
+	 *
+	 * @param   string  $mode  The mode to set (e.g. A, B, BG or C)
+	 *
+	 * @return  void
+	 *
+	 * @since   1.5
+	 */
+	public function setMode($mode) {
 		$this->_mode = $mode;
 	}
-	
-	function getMode() {
+
+	/**
+	 * Get the mode for this model
+	 *
+	 * @return  string  The current mode (e.g. A, B, BG or C)
+	 *
+	 * @since   1.5
+	 */ 
+	public function getMode() {
 		return $this->_mode;
 	}
-	
+
+	/**
+	 * Refresh the list of cached plugins
+	 *
+	 * @return  array  Number of successful and failed plugins that were refreshed.
+	 *
+	 * @since   1.5
+	 */
 	function refreshPlugins() {
 		$dbo =& JFactory::getDBO();	
 		$query = 'INSERT INTO #__sso_plugins (extension_id,filename) SELECT `extension_id`,`element` FROM #__extensions WHERE `extension_id` NOT IN (SELECT `extension_id` FROM #__sso_plugins) AND `folder` = "sso"';
@@ -94,12 +139,28 @@ class ssomanagermodelSSOmanager extends JModel {
 		}
 		return $retval;
 	}
-	
-	function getData() {
+
+	/**
+	 * Get the data from this model.
+	 *
+	 * @return  string  Model data.
+	 *
+	 * @since   1.5
+	 */	
+	public function getData() {
 		return $this->_data;
 	}
-	
-	function loadData($index) {
+
+	/**
+	 * Load the data for this model.
+	 *
+	 * @param   integer  $index  The plugin identifier.
+	 *
+	 * @return  string  Model data.
+	 *
+	 * @since   1.5
+	 */
+	public function loadData($index) {
 		if($index) {
 			$dbo =& JFactory::getDBO();
 			$query  = 'SELECT p.name AS name, p.state AS state, sp.filename AS type, p.ordering AS ordering, p.id AS id, p.params AS params ';
@@ -130,7 +191,14 @@ class ssomanagermodelSSOmanager extends JModel {
 		return $this->_data;
 	}
 	
-	function store() {
+	/**
+	 * Store the data in the database
+	 *
+	 * @return  boolean  Result of the store operation.
+	 *
+	 * @since   1.5
+	 */
+	public function store() {
 		// The mode should have been set by the controller, so all we need to do 
 		// is pull the data out of the request
 		switch($this->_mode) {

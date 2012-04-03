@@ -25,7 +25,7 @@ jimport( 'joomla.application.component.view');
  * @subpackage	Plugins
  * @since 1.0
  */
-class ssomanagerviewPlugin extends JView
+class SSOManagerViewPlugin extends JView
 {
 	function display( $tpl = null )
 	{
