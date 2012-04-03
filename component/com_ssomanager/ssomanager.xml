@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5" method="upgrade">
-	<name>SSO Manager</name>
+	<name>COM_SSOMANAGER</name>
 	<author>Sam Moffatt</author>
 	<creationDate>November 2008</creationDate>
 	<copyright>Sam Moffatt</copyright>
@@ -8,10 +8,7 @@
 	<authorEmail>pasamio@gmail.com</authorEmail>
 	<authorUrl>http://sammoffatt.com.au</authorUrl>
 	<version>2.5.0</version>
-	<description>
-		SSO Manager is a beta component designed to provide
-		functionality to manage SSO related plugins.
-	</description>
+	<description>COM_SSOMANAGER_DESC</description>
 	<install><!-- Runs on install -->
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install.sql</file>
@@ -76,15 +73,16 @@
 			<file>views/ssomanager/tmpl/default.php</file>
 			<file>views/ssomanager/tmpl/index.html</file>
 			<file>views/ssomanager/view.html.php</file>
+			<file>language/en-GB/en-GB.com_ssomanager.ini</file>
+			<file>language/en-GB/en-GB.com_ssomanager.sys.ini</file>
 		</files>
 		<menu admin_menu_link="option=com_ssomanager"
-			admin_menu_alt="SSO Manager"
-			admin_menu_img="js/ThemeOffice/component.png">SSO Manager</menu>
+			admin_menu_alt="COM_SSOMANAGER_MENU_ALT">COM_SSOMANAGER</menu>
 		<submenu>
-			<menu link="option=com_ssomanager&amp;task=entries&amp;mode=serviceprovider">Service Providers</menu>
-			<menu link="option=com_ssomanager&amp;task=entries&amp;mode=usersource">User Source Plugins</menu>
-			<menu link="option=com_ssomanager&amp;task=entries&amp;mode=sso">SSO Plugins</menu>
-			<menu task="configuration">Configuration</menu>
+			<menu link="option=com_ssomanager&amp;task=entries&amp;mode=serviceprovider">COM_SSOMANAGER_MENU_SERVICEPROVIDERS</menu>
+			<menu link="option=com_ssomanager&amp;task=entries&amp;mode=usersource">COM_SSOMANAGER_MENU_USERSOURCEPLUGINS</menu>
+			<menu link="option=com_ssomanager&amp;task=entries&amp;mode=sso">COM_SSOMANAGER_MENU_SSOPLUGINS</menu>
+			<menu task="configuration">COM_SSOMANAGER_MENU_CONFIGURATION</menu>
 		</submenu>
 	</administration>
 </extension>
