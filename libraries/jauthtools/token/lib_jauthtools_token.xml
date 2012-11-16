@@ -11,7 +11,9 @@
 	<license>GNU/GPL</license>	
 	<packager>Sam Moffatt</packager>
 	<packagerurl>http://sammoffatt.com.au/</packagerurl>
-	<update>http://www.jsitepoint.com/update/libraries/lib_jauthtools_token</update>
+	<updateservers>
+		<server type="extension" priority="1" name="JAuthTools Token Authentication Library Update Site">http://www.jsitepoint.com/update/libraries/lib_jauthtools_token</server>
+	</updateservers>
 	<version>2.5.0</version>
 	<files>
 		<file>token.php</file>

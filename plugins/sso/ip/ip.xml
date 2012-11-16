@@ -8,7 +8,9 @@
 	<authorEmail>pasamio@gmail.com</authorEmail>
 	<authorUrl>sammoffat.com.au</authorUrl>
 	<version>2.5.0</version>
-	<update>http://www.jsitepoint.com/update/plugins/plgssoip</update>
+	<updateservers>
+		<server type="extension" priority="1" name="SSO IP Authentication Plugin Update Site">http://www.jsitepoint.com/update/plugins/plgssoip</server>
+	</updateservers>
 	<description>Automatically logs users as administrator if they are on the IP list.</description>
 	<files>
 		<filename plugin="ip">ip.php</filename>

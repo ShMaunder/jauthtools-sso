@@ -101,11 +101,11 @@ class ssomanagerviewProvider extends JView {
 		$lists['status'] = JHTML::_('select.booleanlist',  'status', 'class="inputbox"', $row->status);
 
 		// get params definitions
-		$params = new JParameter( $row->params, JApplicationHelper::getPath( 'plg_xml', 'sso'.DS.$plugin->element ), 'plugin' );
+		//$params = new JParameter( $row->params, JApplicationHelper::getPath( 'plg_xml', 'sso'.DS.$plugin->element ), 'plugin' );
 		$this->assignRef('lists',		$lists);
 		$this->assignRef('provider', $row);
 		$this->assignRef('plugin',		$plugin);
-		$this->assignRef('params',		$params);
+		//$this->assignRef('params',		$params);
 		$this->assignRef('mode', $mode);
 		
 		parent::display($tpl);

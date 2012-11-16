@@ -3,18 +3,17 @@
  * SSO JAuthTools SimpleSSO Plugin 
  * 
  * This file handles Simple SSO 
- * 
- * PHP4/5
  *  
  * Created on July 3, 2008
  * 
  * @package JAuthTools
  * @author Sam Moffatt <pasamio@gmail.com>
  * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2009 Sam Moffatt 
- * @version SVN: $Id:$
+ * @copyright 2012 Sam Moffatt 
  * @see JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
  */
+
+defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 jimport('jauthtools.sso'); // should be included already
@@ -24,16 +23,36 @@ jimport('jauthtools.sso'); // should be included already
  * Attempts to match a user based on a key which is valid with SimpleSSO
  */
 class plgSSOSimpleSSO extends JPlugin {
-	function detectRemoteUser() {
+	/**
+	 * Detect a remote user from a SimpleSSO request.
+	 *
+	 * @return  string  The username of the remote user or false if unknown.
+	 *
+	 * @since   1.5.0
+	 */
+	public function detectRemoteUser() {
 		$providers = JAuthSSOAuthentication::getProvider('simplesso');
 		foreach($providers as $provider) {
-			return $this->_detectUser($provider);
+			$user = $this->_detectUser($provider);
+			if ($user !== false)
+			{
+				return $user;
+			}
 		}
 		
 		return false;
 	}
-	
-	function _detectUser($instance) {
+
+	/**
+	 * Detect the user for a given instance
+	 *
+	 * @param   object  $instance  An object representing the SimpleSSO provider.
+	 *
+	 * @return  string  The detected username.
+	 *
+	 * @since   1.5.0
+	 */	
+	private function _detectUser($instance) {
 		$key = JRequest::getVar('authkey','');
 		$params = new JRegistry();
 		$params->loadJSON($instance->params);
@@ -71,8 +90,17 @@ class plgSSOSimpleSSO extends JPlugin {
 			}
 		}
 	}
-	
-	function getSPLink($instance) {
+
+	/**
+	 * Get service provider link for a given instance.
+	 *
+	 * @param   object  $instance  An object representing an SSO instance.
+	 *
+	 * @return  string  A link to the service provider.
+	 *
+	 * @since   1.5.0
+	 */	
+	public function getSPLink($instance) {
 		$instance_params = new JRegistry();
 		$instance_params->loadJSON($instance->params);
 		$params = clone($this->params); // take a copy of this to prevent the instance overloading the default

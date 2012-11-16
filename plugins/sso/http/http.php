@@ -2,30 +2,35 @@
 /**
  * HTTP Based SSO
  * 
- * This use Server variables to identify the user 
- * 
- * PHP4/5
+ * This plugin uses server variables to identify the user.
  *  
  * Created on Apr 17, 2007
  * 
  * @package JAuthTools
  * @author Sam Moffatt <pasamio@gmail.com>
  * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2009 Sam Moffatt 
- * @version SVN: $Id:$
+ * @copyright 2012 Sam Moffatt 
  * @see JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
  */
+ 
+defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 /**
  * SSO HTTP Source
  * Attempts to match a user based on the supplied server variables
- * @package JAuthTools
- * @subpackage SSO 
+ * @package     JAuthTools
+ * @subpackage  SSO 
  */
 class plgSSOHTTP extends JPlugin {
-
-	function detectRemoteUser() {
+	/**
+	 * Detect a remote user from the HTTP request (e.g. web server auth)
+	 *
+	 * @return  string  The detected user or false.
+	 *
+	 * @since   1.5.0
+	 */	
+	public function detectRemoteUser() {
 		$params = $this->params;
 		$ip_blacklist = $params->get('ip_blacklist','');
 		$list = explode("\n", $ip_blacklist);

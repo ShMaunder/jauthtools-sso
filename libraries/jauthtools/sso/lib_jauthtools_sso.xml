@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<extension type="library" version="2.5">
+<extension type="library" version="2.5" method="upgrade">
 	<name>JAuthTools SSO Library</name>
 	<libraryname>jauthtools</libraryname>
 	<url>http://sammoffatt.com.au/jauthtools</url>
@@ -11,7 +11,9 @@
 	<license>GNU/GPL</license>	
 	<packager>Sam Moffatt</packager>
 	<packagerurl>http://sammoffatt.com.au/</packagerurl>
-	<update>http://www.jsitepoint.com/update/libraries/lib_jauthtools_sso</update>
+	<updateservers>
+		<server type="extension" priority="1" name="JAuthTools SSO Library Update Site">http://www.jsitepoint.com/update/libraries/lib_jauthtools_sso</server>
+	</updateservers>
 	<version>2.5.0</version>
 	<files>
 		<file>sso.php</file>

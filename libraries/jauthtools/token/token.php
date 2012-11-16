@@ -1,44 +1,79 @@
 <?php
 /**
- * Document Description
+ * JAuthTools Token Login "Token" Class
  * 
- * Document Long Description 
- * 
- * PHP4/5
+ * PHP5
  *  
  * Created on Nov 26, 2008
  * 
- * @package package_name
- * @author Sam Moffatt <pasamio@gmail.com>
- * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2009 Sam Moffatt 
- * @version SVN: $Id:$
- * @see http://joomlacode.org/gf/project/   JoomlaCode Project:    
+ * @package     JAuthTools.SSO
+ * @subpackage  TokenLogin
+ * @author      Sam Moffatt <pasamio@gmail.com>
+ * @license     GNU/GPL http://www.gnu.org/licenses/gpl.html
+ * @copyright   2012 (C) Sam Moffatt 
  */
  
+/**
+ * JAuthTools Token Class
+ * @package     JAuthTools.SSO
+ * @subpackage  TokenLogin
+ * @since       1.5
+ */
 class JAuthToolsToken extends JTable {
-
-	var $username = '';
-	var $logintoken = '';
-	var $logins = '';
-	var $expiry = '';
-	var $landingpage = '';
+	/**
+	 * @var    The username
+	 * @since  1.5
+	 */
+	public $username = '';
+	
+	/** 
+	 * @var    Login token to use
+	 * @since  1.5
+	 */
+	public $logintoken = '';
+	
+	/**
+	 * @var    The number of permitted logins.
+	 * @since  1.5
+	 */
+	public $logins = 0;
+	
+	/**
+	 * @var    The expiry for this token.
+	 * @since  1.5
+	 */
+	public $expiry = '';
+	
+	/**
+	 * @var    The destination landing page for this token.
+	 * @since  1.5
+	 */
+	public $landingpage = '';
 	
 	/**
 	 * Constructor
+	 *
+	 * @param  JDatabase  $db  The JDatabase connection to use.
+	 *
+	 * @since  1.5
 	 */
-	function __construct(&$db) {
+	public function __construct(&$db) {
 		parent::__construct( '#__jauthtools_tokens', 'logintoken', $db );
 	}
 	
 	/**
 	 * Issue a token
-	 * @var string username to use
-	 * @var int number of hours before token expiry (default is 120 or 5 days)
-	 * @var int number of logins to provide before token is removed (default 5)
-	 * @var string token identifier
+	 *
+	 * @param   string  $username     The username to authenticate this token against.
+	 * @param   int     $expiry       The number of hours before token expiry (default is 120 or 5 days)
+	 * @param   int     $logins       The number of logins to provide before token is removed (default 5)
+	 * @param   string  $landingpage  Destination landing page for the token.
+	 *
+	 * @return  string  A token.
+	 *
+	 * @since   1.5
 	 */
-	function issueToken($username, $expiry=120, $logins=5, $landingpage='') {
+	public function issueToken($username, $expiry=120, $logins=5, $landingpage='') {
 		$dbo =& JFactory::getDBO();
 		$token = new JAuthToolsToken($dbo, true);
 		$token->username = $username;
@@ -54,11 +89,16 @@ class JAuthToolsToken extends JTable {
 	
 	/**
 	 * Generate a login url for a token (either from the loaded object or from a given param)
-	 * @param string Token to use, if blank uses the logintoken attribute of the current object
-	 * @return string URL to redirect to, alternatively blank on failure
+	 *
+	 * @param   string   $token    Token to use, if blank uses the logintoken attribute of the current object
+	 * @param   boolean  $encoded  If the token is encoded already (don't re-encode).
+	 *
+	 * @return  string URL to redirect to, alternatively blank on failure
+	 *
+	 * @since   1.5
 	 */
-	function generateLoginURL($token='', $encoded = false) {
-		if(!$token) {
+	public function generateLoginURL($token='', $encoded = false) {
+		if(!strlen($token)) {
 			if(!isset($this->logintoken)) {
 				return '';
 			} else {
@@ -67,7 +107,7 @@ class JAuthToolsToken extends JTable {
 			}
 		}
 		if($encoded) {
-			return str_replace('administrator/','', JURI::base()).'index.php?option=com_tokenlogin&logintoken='. $token);
+			return str_replace('administrator/','', JURI::base()).'index.php?option=com_tokenlogin&logintoken='. $token;
 		} else {
 			return str_replace('administrator/','', JURI::base()).'index.php?option=com_tokenlogin&logintoken='. md5(substr($token, 0, 32)).md5(substr($token, 32,32));
 		}
@@ -75,9 +115,14 @@ class JAuthToolsToken extends JTable {
 	
 	/**
 	 * Map an object to this object
+	 *
 	 * @param object Object to map to this object
+	 *
+	 * @return  void
+	 *
+	 * @since  1.5
 	 */
-	function mapObject($object) {
+	public function mapObject($object) {
 		$vars = get_object_vars($object);
 		$class_vars = get_class_vars(get_class($this));
 		foreach($vars as $var=>$value) {
@@ -92,11 +137,13 @@ class JAuthToolsToken extends JTable {
 	 *
 	 * Can be overloaded/supplemented by the child class
 	 *
-	 * @access public
-	 * @param boolean If false, null object variables are not updated
-	 * @return null|string null if successful otherwise returns and error message
+	 * @param   boolean  $updateNulls  If false, null object variables are not updated.
+	 *
+	 * @return  boolean  False on error, true on sucess.
+	 *
+	 * @since   1.5
 	 */
-	function store( $updateNulls=false )
+	public function store( $updateNulls=false )
 	{
 		if( $this->logintoken )
 		{
@@ -124,10 +171,14 @@ class JAuthToolsToken extends JTable {
 
 	/**
 	 * Revoke a given token
-	 * @param string Token to revoke
-	 * @return boolean result of db operation
+	 *
+	 * @param   string  $token  Token to revoke
+	 *
+	 * @return  boolean  result of db operation
+	 *
+	 * @since   1.5
 	 */
-	function revokeToken($token) {
+	public function revokeToken($token) {
 		$dbo =& JFactory::getDBO();
 		$dbo->setQuery('DELETE FROM #__jauthtools_tokens WHERE logintoken = '. $dbo->Quote($token));
 		return $dbo->query();
@@ -135,10 +186,14 @@ class JAuthToolsToken extends JTable {
 	
 	/**
 	 * Revoke a users outstanding tokens
-	 * @param string Username to revoke
-	 * @return boolean result of db operation
+	 *
+	 * @param   string  $username  Username to revoke
+	 *
+	 * @return  boolean  result of db operation
+	 *
+	 * @since   1.5
 	 */
-	function revokeUserTokens($username) {
+	public function revokeUserTokens($username) {
 		$dbo =& JFactory::getDBO();
 		$dbo->setQuery('DELETE FROM #__jauthtools_tokens WHERE username = '. $dbo->Quote($username));
 		return $dbo->query();
@@ -147,10 +202,14 @@ class JAuthToolsToken extends JTable {
 
 	/**
 	 * Validate a given token
-	 * @param string Token to validate
-	 * @return boolean Result of validation
+	 *
+	 * @param   string  $key  Token to validate
+	 *
+	 * @return  boolean  False if invalid or a copy of the row in a stdClass
+	 *
+	 * @since   1.5
 	 */
-	function validateToken($key) {
+	public function validateToken($key) {
 		$dbo =& JFactory::getDBO();
 		// delete any older tokens
 		$dbo->setQuery('DELETE FROM #__jauthtools_tokens WHERE expiry < "' . time() .'"');
@@ -174,10 +233,13 @@ class JAuthToolsToken extends JTable {
 	/**
 	 * Create a token-string
 	 *
-	 * @param int $length lenght of string
-	 * @return string $id generated token (64 char)
+	 * @param   int  $length  lenght of string
+	 *
+	 * @return  string generated token (64 char)
+	 *
+	 * @since   1.5
 	 */
-	function createLoginToken()
+	public function createLoginToken()
 	{
 		static $chars	=	'0123456789abcdef';
 		$dirname = dirname(__FILE__);

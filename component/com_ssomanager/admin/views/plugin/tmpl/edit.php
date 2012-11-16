@@ -22,7 +22,7 @@ JHtml::_('behavior.formvalidation');
 	}
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_plugins&layout=edit&extension_id='.(int) $this->item->extension_id); ?>" method="post" name="adminForm" id="style-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_ssomanager&layout=edit&extension_id='.(int) $this->item->extension_id); ?>" method="post" name="adminForm" id="style-form" class="form-validate">
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_('JDETAILS') ?></legend>
@@ -80,6 +80,7 @@ JHtml::_('behavior.formvalidation');
 
 	<?php echo JHtml::_('sliders.end'); ?>
 	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="mode" value="<?php echo JRequest::getCmd('mode') ?>">
 	<?php echo JHtml::_('form.token'); ?>
 	</div>
 

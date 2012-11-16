@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="1.6" type="plugin"  group="system">
-	<name>System - Single Sign On</name>
+<extension version="2.5" type="plugin"  group="system" method="upgrade">
+	<name>System - Single Sign On (SSO)</name>
 	<author>Sam Moffatt</author>
 	<creationDate>November 2010</creationDate>
 	<copyright>(C) 2010 Sam Moffatt. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>pasamio@gmail.com</authorEmail>
 	<authorUrl>sammoffatt.com.au/jauthtools/</authorUrl>
-	<version>1.6.0</version>
-	<update>http://www.jsitepoint.com/update/plugins/plgsystemsso</update>
+	<version>2.5.0</version>
+	<updateservers>
+		<server type="extension" priority="1" name="System Single Sign On (SSO) Plugin Update Site">http://www.jsitepoint.com/update/plugins/plgsystemsso</server>
+	</updateservers>
 	<description>This plugin provides the base of the JAuthTools SSO infrastructure.</description>
 	<files>
 		<filename plugin="sso">sso.php</filename>

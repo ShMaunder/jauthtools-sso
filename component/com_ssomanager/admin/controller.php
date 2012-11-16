@@ -105,7 +105,7 @@ class SSOManagerController extends JController
     		JToolbarHelper::editList('edit','Edit');
     		JToolbarHelper::deleteList('delete');
     	} else {
-    		JToolbarHelper::editList('edit','Edit');
+    		JToolbarHelper::editList('plugin.edit','Edit');
     	}
     	
     	$model =& $this->getModel();
@@ -280,7 +280,7 @@ class SSOManagerController extends JController
     		case 'user':
     		case 'usersource':
     		case 'authentication':
-    			JToolbarHelper::editList('edit','Edit');
+    			JToolbarHelper::editList('plugin.edit','Edit');
     			break;
     	}
     }
@@ -334,9 +334,13 @@ class SSOManagerController extends JController
      * @since   1.5
      */
     public function configuration() {
-    	JHtml::stylesheet('toolbar.css', 'administrator/components/com_ssomanager/media/css/');
-    	JToolbarHelper::title(JText::_('SSO Manager'). ' - '.  JText::_('Configuration'));
-    	JToolBarHelper::custom( 'refresh', 'refresh', 'refresh','Refresh Plugin List',false,false);
+	    $view = JRequest::getVar('view');
+	    if (empty($view))
+	    {
+    		JHtml::stylesheet('toolbar.css', 'administrator/components/com_ssomanager/media/css/');
+    		JToolbarHelper::title(JText::_('SSO Manager'). ' - '.  JText::_('Configuration'));
+    		JToolBarHelper::custom( 'refresh', 'refresh', 'refresh','Refresh Plugin List',false,false);
+		}
 		parent::display();
     	/*
 		JToolBarHelper::save();
@@ -369,38 +373,43 @@ class SSOManagerController extends JController
 	{
 		// Check for request forgeries
 		JRequest::checkToken() or jexit( 'Invalid Token' );
+		
+		// Grab the mode and model
 		$mode = $this->getMode();
 		$model =& $this->getModelFromMode($mode);
 		
-		
-		
+		// look for the item's we're publishing
 		$cid     = JRequest::getVar( 'cid', array(0), 'post', 'array' );
 		JArrayHelper::toInteger($cid, array(0));
 		$publish = ( $this->getTask() == 'publish' ? 1 : 0 );
 		
-
+		// check we actually have something to publish!
 		if (count( $cid ) < 1) {
 			$action = $publish ? JText::_( 'publish' ) : JText::_( 'unpublish' );
 			JError::raiseError(500, JText::_( 'Select a plugin to '.$action ) );
 		}
-		
+	
+		// handle the publishing!	
 		$db		=& JFactory::getDBO();
 		$user	=& JFactory::getUser();
 		
 		$cids = implode( ',', $cid );
 
 		$table = ''; $key = '';
+		$query = $db->getQuery(1);
 		switch($mode) {
+			// if we're dealing with a service provider, then we need to update the sso_providers table
 			case 'serviceprovider':
+				$query->update('#__sso_providers')->where('id IN (' . $cids . ')');
 				$table = '#__sso_providers';
 				break;
+			// otherwise it's a normal plugin (sso or user source) so update the extensions table
 			default:
+				$query->update('#__extensions')->where('extension_id IN (' . $cids . ')');
 				$table = '#__extensions';
 				break;
 		}
-		$query = 'UPDATE '. $table .' SET state = '.(int) $publish
-			. ' WHERE extension_id IN ( '.$cids.' )'
-			;
+		$query->set('state = ' . (int) $publish);
 		$db->setQuery( $query );
 		if (!$db->query()) {
 			JError::raiseError(500, $db->getErrorMsg() );

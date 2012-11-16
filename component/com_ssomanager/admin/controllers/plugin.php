@@ -18,4 +18,46 @@ jimport('joomla.application.component.controllerform');
  */
 class SSOManagerControllerPlugin extends JControllerForm
 {
+    /**
+     * Override the default edit function to add in the mode
+     *
+     * @return  void
+     *
+     * @since   2.5.0
+     */
+    public function edit()
+    {
+        parent::edit();
+        $redirect = new JURI($this->redirect);
+        $redirect->setVar('mode', JRequest::getCmd('mode'));
+        $this->setRedirect($redirect);
+    }
+
+    /**
+     * Override the default save controller and send them somewhere else.
+     *
+     * @return  void
+     *
+     * @since   2.5.0
+     */
+    public function save()
+    {
+        parent::save();
+        $mode = JRequest::getCmd('mode', 'sso');
+        $this->setRedirect('index.php?option=com_ssomanager&task=entries&mode=' . $mode);
+    }
+ 
+    /**
+     * Override the default cancel controller and send them somewhere else.
+     *
+     * @return  void
+     *
+     * @since   2.5.0
+     */
+    public function cancel()
+    {
+        parent::cancel();
+        $mode = JRequest::getCmd('mode', 'sso');
+        $this->setRedirect('index.php?option=com_ssomanager&task=entries&mode=' . $mode);
+    }
 }

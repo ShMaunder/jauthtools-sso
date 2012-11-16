@@ -3,18 +3,17 @@
  * SSO JAuthTools Token Login Plugin 
  * 
  * This file handles token logins 
- * 
- * PHP4/5
  *  
  * Created on July 3, 2008
  * 
  * @package JAuthTools
  * @author Sam Moffatt <pasamio@gmail.com>
  * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2009 Sam Moffatt 
- * @version SVN: $Id:$
+ * @copyright 2012 Sam Moffatt 
  * @see JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
  */
+
+defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 jimport('jauthtools.token');
@@ -25,30 +24,20 @@ jimport('jauthtools.token');
  */
 class plgSSOTokenLogin extends JPlugin {
 	/**
-	 * Constructor
+	 * Detect a remote user using a token in the request.
 	 *
-	 * For php4 compatability we must not use the __constructor as a constructor for plugins
-	 * because func_get_args ( void ) returns a copy of all passed arguments NOT references.
-	 * This causes problems with cross-referencing necessary for the observer design pattern.
+	 * @return  string  The detected user or false if there was no user.
 	 *
-	 * @param object $subject The object to observe
-	 * @since 1.5
+	 * @since   1.5.0
 	 */
-	function plgSSOTokenLogin(& $subject, $params) {
-		parent :: __construct($subject, $params);
-	}
-
-	function detectRemoteUser() {
+	public function detectRemoteUser() {
 		$key = JRequest::getVar('logintoken','');
 		if($key) {
 			$result = JAuthToolsToken::validateToken($key);
 			if($result) {
 				return $result->username;
-			} else {
-				return false;
 			}
-		} else {
-			return false;
 		}
+		return false;
 	}
 }

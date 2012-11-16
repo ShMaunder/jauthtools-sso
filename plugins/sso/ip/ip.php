@@ -2,19 +2,18 @@
 /**
  * SSO IP Plugin
  * 
- * This file is a simple demonstration of SSO utilising IP addresses or ranges 
- * 
- * PHP4/5
+ * This file is a simple demonstration of SSO utilising IP addresses or ranges.
  *  
  * Created on Mar 13, 2008
  * 
  * @package JAuthTools
  * @author Sam Moffatt <pasamio@gmail.com>
  * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2009 Sam Moffatt 
- * @version SVN: $Id:$
+ * @copyright 2012 Sam Moffatt 
  * @see JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
  */
+
+defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 
@@ -25,8 +24,14 @@ jimport('joomla.plugin.plugin');
  * @subpackage SSO
  */
 class plgSSOIP extends JPlugin {
-	function detectRemoteUser() {
-		global $database, $mainframe, $acl;
+	/**
+	 * Detect a remote user based on their IP address.
+	 *
+	 * @return  string  The detected user or false if no user.
+	 *
+	 * @since   1.5.0
+	 */
+	public function detectRemoteUser() {
 		// load parameters
 		$params = $this->params;
 		$ip_list = $params->get('ip_list','');

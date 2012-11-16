@@ -8,7 +8,9 @@
 	<authorEmail>pasamio@gmail.com</authorEmail>
 	<authorUrl>sammoffatt.com.au</authorUrl>
 	<version>1.5.5</version>
-	<update>http://www.jsitepoint.com/update/plugins/plgssotokenlogin</update>
+	<updateservers>
+		<server type="extension" priority="1" name="Token Login SSO Plugin Update Site">http://www.jsitepoint.com/update/plugins/plgssotokenlogin</server>
+	</updateservers>
 	<description>Uses stored tokens to login users</description>
 	<files>
 		<filename plugin="tokenlogin">tokenlogin.php</filename>

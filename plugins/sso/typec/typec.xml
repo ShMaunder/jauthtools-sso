@@ -8,7 +8,9 @@
 	<authorEmail>pasamio@gmail.com</authorEmail>
 	<authorUrl>sammoffatt.com.au</authorUrl>
 	<version>2.5.0</version>
-	<update>http://www.jsitepoint.com/update/plugins/plgssosimplesso</update>
+	<updateservers>
+		<server type="extension" priority="1" name="SSO Type C Update Site">http://www.jsitepoint.com/update/plugins/plgssosimplesso</server>
+	</updateservers>
 	<description>Sample Type C SSO Plugin</description>
 	<files>
 		<filename plugin="typec">typec.php</filename>

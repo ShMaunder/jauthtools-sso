@@ -1,25 +1,40 @@
 <?php
+/**
+ * Example Type C authentication plugin.
+ *
+ * This is an example of how an SSO type C plugin works.
+ *
+ */
+
+defined('_JEXEC') or die();
+
 jimport('joomla.plugin.plugin');
 
+/**
+ * SSO Type C authentication plugin example
+ *
+ * @package     JAuthTools
+ * @subpackage  SSO
+ */
 class plgSSOTypeC extends JPlugin {
 	/**
-	 * Constructor
+	 * Return the SSO plugin type
 	 *
-	 * For php4 compatability we must not use the __constructor as a constructor for plugins
-	 * because func_get_args ( void ) returns a copy of all passed arguments NOT references.
-	 * This causes problems with cross-referencing necessary for the observer design pattern.
+	 * @return  string  The type of plugin.
 	 *
-	 * @param object $subject The object to observe
-	 * @since 1.5
+	 * @since   1.5.0
 	 */
-	function plgSSOTypeC(& $subject, $params) {
-		parent :: __construct($subject, $params);
-	}
-
-	function getSSOPluginType() {
+	public function getSSOPluginType() {
 		return 'C';
 	}
 
+	/**
+	 * Detect a remote user from the request variable "remote_username".
+	 *
+	 * @return  string  The username of the user or false.
+	 *
+	 * @since   1.5.0
+	 */
 	function detectRemoteUser() {
 		$remote_user = JRequest::getVar('remote_username','');
 		if($remote_user) {
@@ -29,7 +44,14 @@ class plgSSOTypeC extends JPlugin {
 		}
 	}
 
-	function getForm() {
+	/**
+	 * Get a form for this plugin to be displayed in a module or component.
+	 *
+	 * @return  string  The rendered HTML to display.
+	 *
+	 * @since   1.5.0
+	 */
+	public function getForm() {
 		$component = JComponentHelper::getComponent('com_sso', true);
 		$result = '<form method="post" action="'. JURI::base() .'">'
 			. 'Requested Username: '

@@ -8,7 +8,9 @@
 	<authorEmail>pasamio@gmail.com</authorEmail>
 	<authorUrl>http://sammoffatt.com.au/</authorUrl>
 	<version>2.5.0</version>
-	<update>http://www.jsitepoint.com/update/plugins/plgssohttp</update>
+	<updateservers>
+		<server type="extension" priority="1" name="HTTP SSO Detection Plugin Update Site">http://www.jsitepoint.com/update/plugins/plgssohttp</server>
+	</updateservers>
 	<description>Handles user detection using HTTP Provided values, typically REMOTE_USER</description>
 	<files>
 		<filename plugin="http">http.php</filename>

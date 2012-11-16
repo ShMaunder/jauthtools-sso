@@ -49,7 +49,7 @@ class SSOManagerModelList extends JModel {
 				$query .= ' WHERE folder = "'. $mode .'"';
 			}
 			$dbo->setQuery($query);
-			$this->_data = $dbo->loadObjectList();
+			$this->_data = array_map(array($this, 'buildEditLink'), $dbo->loadObjectList());
 		}
 		return $this->_data;
 	}
@@ -106,5 +106,19 @@ class SSOManagerModelList extends JModel {
      */
     public function delete() {
     	JError::raiseError(500, 'Plugins cannot be deleted through this interface');
+    }
+    
+    /**
+     * Build the edit link for this item
+     *
+     * @return  object  Modified object.
+     *
+     * @since   2.5.0
+     */
+    public function buildEditLink($item)
+    {
+	    $mode = $this->getMode();
+		$item->editlink = 'index.php?option=com_ssomanager&task=plugin.edit&mode='. $mode . '&extension_id=' . $item->id . '&cid=' . $item->id;
+	    return $item;
     }
 }

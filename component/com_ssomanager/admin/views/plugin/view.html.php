@@ -12,6 +12,10 @@ jimport('joomla.application.component.view');
 // Register the com_plugins helper as it is used in this view
 JLoader::register('PluginsHelper', JPATH_ADMINISTRATOR . '/components/com_plugins/helpers/plugins.php');
 
+// Load the com_plugins language as well
+$lang = JFactory::getLanguage();
+$lang->load('com_plugins');
+
 /**
  * View to edit a plugin.
  *
@@ -56,7 +60,7 @@ class SSOManagerViewPlugin extends JView
 		$user		= JFactory::getUser();
 		$canDo		= PluginsHelper::getActions();
 
-		JToolBarHelper::title(JText::sprintf('COM_PLUGINS_MANAGER_PLUGIN', JText::_($this->item->name)), 'plugin');
+		JToolBarHelper::title(JText::sprintf('COM_SSOMANAGER_MANAGER_PLUGIN', JText::_($this->item->name)), 'plugin');
 
 		// If not checked out, can save the item.
 		if ($canDo->get('core.edit')) {
