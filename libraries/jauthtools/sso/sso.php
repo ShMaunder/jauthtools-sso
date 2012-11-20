@@ -31,7 +31,7 @@ class JAuthSSOAuthentication extends JObservable {
 		// Import SSO Library Files
 		$isLoaded = JPluginHelper :: importPlugin('sso');
 		if (!$isLoaded) {
-			JLog::add(__CLASS__ . '::__construct: Could not load SSO plugins.', JLog::ERROR, 'sso');
+			JLog::add(__CLASS__ . '::__construct: Could not load any SSO plugins.', JLog::ERROR, 'sso');
 		}
 	}
 
@@ -100,13 +100,14 @@ class JAuthSSOAuthentication extends JObservable {
 		$database->setQuery($query);
 		$result = $database->loadAssocList();
 
-		// If the user already exists, create their session; don't create users
+		// If the user already exists, create their session. We don't create users here.
 		if (count($result))
 		{
+			JLog::add(sprintf('Triggering session setup for "%s"', $username), JLog::DEBUG, 'sso');
 			$result = $result[0];
 			$options = array();
 			$app =& JFactory::getApplication();
-			if($app->isAdmin())
+			if ($app->isAdmin())
 			{
 				// See if they can log into the admin
 				$options['action'] = 'core.login.admin';
@@ -129,7 +130,8 @@ class JAuthSSOAuthentication extends JObservable {
 
 			// Log out the existing user if someone is logged into this client
 			$user =& JFactory::getUser();
-			if($user->id) {
+			if ($user->id)
+			{
 				// Build the credentials array
 				$parameters['username'] = $user->get('username');
 				$parameters['id']       = $user->get('id');
@@ -142,11 +144,13 @@ class JAuthSSOAuthentication extends JObservable {
 			// Validate that the login plugins were all happy.
 			if (!in_array(false, $results, true))
 			{
+				JLog::add(sprintf('SSO system logged in user "%s".', $username), JLog::DEBUG, 'sso');
 				return true;
 			}
 
 			// Fail the login if one of the login plugins failed.
 			$this->triggerEvent('onLoginFailure', array($result));
+			JLog::add(sprintf('SSO system was unable to login user "%s".', $username), JLog::NOTICE, 'sso');
 			return false;
 		}
 	}

@@ -34,7 +34,8 @@ JLog::addLogger($logger, JLog::ALL, array('sso', 'usersource', 'jauthtools'));
  * @subpackage  SSO 
  * @since       1.5
  */
-class plgSystemSSO extends JPlugin {
+class plgSystemSSO extends JPlugin
+{
 	/**
 	 * Run the onAfterInitialise trigger
 	 *
@@ -42,22 +43,32 @@ class plgSystemSSO extends JPlugin {
 	 *
 	 * @since   1.5.0
 	 */
-	public function onAfterInitialise() {
+	public function onAfterInitialise()
+	{
 		$params = $this->params;
 		$ip_blacklist = $params->get('ip_blacklist','');
 		$list = explode("\n", $ip_blacklist);
-		if(in_array($_SERVER['REMOTE_ADDR'],$list)) {
+		if (in_array($_SERVER['REMOTE_ADDR'],$list)) {
+			JLog::add('Request from ' . $_SERVER['REMOTE_ADDR'] . ' ignored due to SSO system black list', JLog::DEBUG, 'sso');
 			return false;
 		}	
 
-		if(!$params->get('backend',0)) {
+		if (!$params->get('backend',0)) 
+		{
 			$app =& JFactory::getApplication();
-			if($app->isAdmin()) return false;
+			if($app->isAdmin())
+			{
+				return false;
+			}
 		}
 	
-		if(!$params->get('override',0)) {
+		if (!$params->get('override',0)) 
+		{
 			$user =& JFactory::getUser();
-			if($user->id) return false;
+			if($user->id) 
+			{
+				return false;
+			}
 		}
 	
 		$sso = new JAuthSSOAuthentication();
