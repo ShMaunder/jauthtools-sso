@@ -1,15 +1,15 @@
 <?php
 /**
  * SSO Login System
- * 
- * This starts an SSO Login. SSO Login may occur via a variety of sources 
- *  
+ *
+ * This starts an SSO Login. SSO Login may occur via a variety of sources
+ *
  * Created on Apr 17, 2007
- * 
+ *
  * @package    JAuthTools
  * @author     Sam Moffatt <pasamio@gmail.com>
  * @license    GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright  2012 Sam Moffatt 
+ * @copyright  2012 Sam Moffatt
  * @see        JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
  */
 
@@ -30,8 +30,9 @@ JLog::addLogger($logger, JLog::ALL, array('sso', 'usersource', 'jauthtools'));
 /**
  * SSO Initiation
  * Kicks off SSO Authentication
+ *
  * @package     JAuthTools
- * @subpackage  SSO 
+ * @subpackage  SSO
  * @since       1.5
  */
 class plgSystemSSO extends JPlugin
@@ -45,16 +46,18 @@ class plgSystemSSO extends JPlugin
 	 */
 	public function onAfterInitialise()
 	{
-		$params = $this->params;
-		$ip_blacklist = $params->get('ip_blacklist','');
-		$list = explode("\n", $ip_blacklist);
-		if (in_array($_SERVER['REMOTE_ADDR'],$list)) 
+		// Handle IP addresses that are not permitted to use SSO.
+		$ip_blacklist = $this->params->get('ip_blacklist','');
+		$list = array_map('trim', explode("\n", $ip_blacklist));
+
+		if (in_array($_SERVER['REMOTE_ADDR'],$list))
 		{
 			JLog::add('Request from ' . $_SERVER['REMOTE_ADDR'] . ' ignored due to SSO system black list', JLog::DEBUG, 'sso');
 			return false;
-		}	
+		}
 
-		if (!$params->get('backend',0)) 
+		// By default we don't enable SSO in the administrator.
+		if (!$this->params->get('backend', 0))
 		{
 			$app =& JFactory::getApplication();
 			if($app->isAdmin())
@@ -62,17 +65,19 @@ class plgSystemSSO extends JPlugin
 				return false;
 			}
 		}
-	
-		if (!$params->get('override',0)) 
+
+		// By default we don't run SSO if the user is logged in.
+		if (!$this->params->get('override',0))
 		{
 			$user =& JFactory::getUser();
-			if($user->id) 
+			if($user->id)
 			{
 				return false;
 			}
 		}
-	
+
+		// Handle SSO auth!
 		$sso = new JAuthSSOAuthentication();
-		$sso->doSSOAuth($params->getValue('autocreate',false));
+		$sso->doSSOAuth($this->params->getValue('autocreate',false));
 	}
 }

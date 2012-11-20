@@ -11,7 +11,7 @@ defined('_JEXEC') or die('Direct Access to this location is not allowed.');
 
 jimport('jauthtools.sso');
 
- 
+
 jimport('jauthtools.sso');
 jimport('jauthtools.usersource');
 
@@ -43,10 +43,10 @@ if(!function_exists('getLinkFromItemID')) {
 
 
 $ip_blacklist = $params->get('ip_blacklist','');
-$list = explode("\n", $ip_blacklist);
+$list = array_map('trim', explode("\n", $ip_blacklist));
 if(in_array($_SERVER['REMOTE_ADDR'],$list)) {
 	return false;
-}	
+}
 
 
 $user =& JFactory::getUser();
@@ -60,7 +60,7 @@ $sso->doSSOAuth($params->getValue('autocreate',false));
 if($before != $user->id) { // user id changed
 	$app =& JFactory::getApplication();
 	$uri =& JFactory::getURI();
-	$nextHop = $params->get('nexthop',false); 
+	$nextHop = $params->get('nexthop',false);
 	if(JRequest::getMethod() == 'GET') { // get methods we can proxy easily without losing info
 		if($nextHop) { // redirect to the next hop location
 			$app->redirect(getLinkFromItemID($nextHop));
@@ -74,14 +74,14 @@ if($before != $user->id) { // user id changed
 
 
 	$plugin = $params->get('plugin', '');
-	
+
 	if ($plugin) {
 		$plugin = JPluginHelper :: getPlugin('sso', $plugin);
 		if (empty ($plugin)) {
 			JError :: raiseError(500, 'Invalid plugin');
 			return false;
 		}
-	
+
 		$className = 'plg' . $plugin->type . $plugin->name;
 		if (class_exists($className)) {
 			$plugin = new $className ($sso, (array) $plugin);
@@ -89,7 +89,7 @@ if($before != $user->id) { // user id changed
 			JError :: raiseWarning(500, 'Could not load ' . $className);
 			return false;
 		}
-	
+
 		// Output the form
 		if(method_exists($plugin,'getForm')) {
 			echo $plugin->getForm();
@@ -99,7 +99,7 @@ if($before != $user->id) { // user id changed
 				echo '<ul>';
 				foreach($providers as $provider) {
 					echo '<li><a href="'.$plugin->getSPLink($provider) .'">'. $provider->name .'</a>';
-				} 
+				}
 				echo '</ul>';
 			}
 		}
@@ -107,7 +107,7 @@ if($before != $user->id) { // user id changed
 		$plugins = JPluginHelper :: getPlugin('sso');
 		$forms = Array();
 		$links = Array();
-		
+
 		foreach ($plugins as $plugin) {
 			$className = 'plg' . $plugin->type . $plugin->name;
 			$name = $plugin->name;
@@ -117,7 +117,7 @@ if($before != $user->id) { // user id changed
 				JError :: raiseWarning(50, 'Could not load ' . $className);
 				continue; // skip this plugins!
 			}
-	
+
 			// Output the form if the function is available
 			if (method_exists($plugin, 'getForm')) {
 				$forms[] = $plugin->getForm();
@@ -129,7 +129,7 @@ if($before != $user->id) { // user id changed
 						$links[] = '<a href="'.$plugin->getSPLink($provider) .'">'. $provider->name .'</a>';
 					}
 				}
-			}		
+			}
 		}
 		if($params->get('show_links',0)) {
 			if($params->get('show_titles',0)) echo '<h1>'. JText::_('Links') .'</h1><br />';
@@ -140,7 +140,7 @@ if($before != $user->id) { // user id changed
 			}
 			echo '</ul>';
 		}
-		
+
 		if($params->get('show_forms',0)) {
 			if($params->get('show_titles',0)) echo '<h1>'. JText::_('Forms') .'</h1><br />';
 			// this is a _very_ bad way of doing this; TODO: don't do this
@@ -148,7 +148,7 @@ if($before != $user->id) { // user id changed
 			foreach($forms as $form) {
 				echo '<li>'. $form;
 			}
-			echo '</ul>';	
+			echo '</ul>';
 		}
 	}
 }
