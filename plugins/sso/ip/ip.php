@@ -6,11 +6,11 @@
  *  
  * Created on Mar 13, 2008
  * 
- * @package JAuthTools
- * @author Sam Moffatt <pasamio@gmail.com>
- * @license GNU/GPL http://www.gnu.org/licenses/gpl.html
- * @copyright 2012 Sam Moffatt 
- * @see JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
+ * @package    JAuthTools
+ * @author     Sam Moffatt <pasamio@gmail.com>
+ * @license    GNU/GPL http://www.gnu.org/licenses/gpl.html
+ * @copyright  2012 Sam Moffatt 
+ * @see        JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
  */
 
 defined('_JEXEC') or die();
@@ -20,10 +20,12 @@ jimport('joomla.plugin.plugin');
 /**
  * SSO IP Source
  * Attempts to match a user based on their network address attribute (IP Address)
- * @package JAuthTools
- * @subpackage SSO
+ *
+ * @package     JAuthTools
+ * @subpackage  SSO
  */
-class plgSSOIP extends JPlugin {
+class plgSSOIP extends JPlugin
+{
 	/**
 	 * Detect a remote user based on their IP address.
 	 *
@@ -31,25 +33,31 @@ class plgSSOIP extends JPlugin {
 	 *
 	 * @since   1.5.0
 	 */
-	public function detectRemoteUser() {
+	public function detectRemoteUser() 
+	{
 		// load parameters
 		$params = $this->params;
 		$ip_list = $params->get('ip_list','');
 		$user = $params->get('user','admin');
 		$use_table = $params->get('use_table', 0);
-		if($use_table) 
+
+		if ($use_table) 
 		{
-			$dbo =& JFactory::getDBO();
-			$dbo->setQuery('SELECT entry, username FROM #__jauthtools_ipmap');
+			$dbo = JFactory::getDBO();
+			$query = $dbo->getQuery(1);
+			$query->select(array('entry', 'username'))->from('#__jauthtools_ipmap');
+			$dbo->setQuery($query);
 			$rows = $dbo->loadObjectList('entry');
 			$list = array_keys($rows);
-		} else {
-			$list = explode("\n", $ip_list);
+		}
+		else
+		{
+			$list = array_map('trim', explode("\n", $ip_list));
 		}
 		
 		$ip = $_SERVER['REMOTE_ADDR'];
 		
-		if(in_array($ip,$list))
+		if (in_array($ip,$list))
 		{
 			if($use_table) {
 				return $rows[$ip]->username;
@@ -77,7 +85,7 @@ class plgSSOIP extends JPlugin {
 	}
 }
 
-if(!class_exists('Net_IPv4')) 
+if (!class_exists('Net_IPv4')) 
 {
 	/**
 	* Class to provide IPv4 calculations
