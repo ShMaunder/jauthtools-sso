@@ -10,10 +10,10 @@
  * @author     Sam Moffatt <pasamio@gmail.com>
  * @license    GNU/GPL http://www.gnu.org/licenses/gpl.html
  * @copyright  2009 - 2012 Sam Moffatt
- * @see JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
+ * @see        JoomlaCode Project: http://joomlacode.org/gf/project/jauthtools/
  */
 
-defined('JPATH_BASE') or die('sos');
+defined('JPATH_BASE') or die();
 jimport('joomla.base.observable');
 
 /**
@@ -149,7 +149,7 @@ class JAuthSSOAuthentication extends JObservable {
 			}
 
 			// Fail the login if one of the login plugins failed.
-			$this->triggerEvent('onLoginFailure', array($result));
+			$dispatcher->trigger('onLoginFailure', array($result));
 			JLog::add(sprintf('SSO system was unable to login user "%s".', $username), JLog::NOTICE, 'sso');
 			return false;
 		}
@@ -181,10 +181,13 @@ class JAuthSSOAuthentication extends JObservable {
 
 
 		$element =& $sso->valid_states[0];
-		if($element) {
+		if($element)
+		{
 			$data['state_map'] = isset($element->state) ? self::_processStateMap($element) : array(); // default to blank array
 			$data['default_state'] = $element->attributes('default');
-		} else {
+		}
+		else
+		{
 			$data['state_map'] = array();
 			$data['default_state'] = 0;
 		}
@@ -207,12 +210,17 @@ class JAuthSSOAuthentication extends JObservable {
 	public function getBaseUrl($prefer_component=true, $plugin='') {
 		if($prefer_component && JComponentHelper::getComponent('com_ssomanager', true)) {
 			// if we have a component, use it
-			if(!empty($plugin)) {
-				return urlencode(JURI::base().'index.php?option=com_ssomanager&task=delegate&plugin='. $plugin);	
-			} else {
-				return urlencode(JURI::base().'index.php?option=com_ssomanager&task=delegate');	
+			if(!empty($plugin))
+			{
+				return urlencode(JURI::base() . 'index.php?option=com_ssomanager&task=delegate&plugin='. $plugin);	
 			}
-		} else {
+			else
+			{
+				return urlencode(JURI::base() . 'index.php?option=com_ssomanager&task=delegate');	
+			}
+		}
+		else
+		{
 			// hope that the plugin is active or a module
 			return urlencode(JURI::base());
 		}
@@ -272,11 +280,18 @@ class JAuthSSOAuthentication extends JObservable {
 	protected function _processStateMap($element)
 	{
 		$map = array();
-		foreach($element->state as $state) {
+		foreach ($element->state as $state) 
+		{
 			$index = $state->attributes('value');
 			$map[$index] = array();
-			if(!isset($state->operation)) continue;
-			foreach($state->operation as $operation) {
+
+			if (!isset($state->operation)) 
+			{
+				continue;
+			}
+
+			foreach ($state->operation as $operation)
+			{
 				$map[$index][] = $operation->attributes('name');
 			}
 		}
@@ -290,21 +305,23 @@ class JAuthSSOAuthentication extends JObservable {
 	 *
 	 * @since   1.5
 	 */
-	protected function &_loadProviders() {
+	protected function &_loadProviders()
+	{
 		static $plugins;
 
-		if (isset($plugins)) {
+		if (isset($plugins))
+		{
 			return $plugins;
 		}
 
-		$db =& JFactory::getDBO();
-		$query = 'SELECT element AS type, sp.*'
-		. ' FROM #__sso_providers sp '
-		. ' RIGHT JOIN #__plugins p ON p.id = sp.plugin_id'
-		. ' WHERE sp.published >= 1 AND p.published >= 1'
-		. ' ORDER BY ordering';
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(1);
+		$query->select('element type, sp.*')->from('#__sso_providers sp')
+			->rightJoin('#__plugins p ON p.id = sp.plugin_id')
+			->where('sp.published >= 1')->where('p.published >= 1')
+			->order('ordering');
 
-		$db->setQuery( $query );
+		$db->setQuery($query);
 
 		$plugins = $db->loadObjectList();
 		return $plugins;

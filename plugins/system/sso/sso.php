@@ -48,7 +48,8 @@ class plgSystemSSO extends JPlugin
 		$params = $this->params;
 		$ip_blacklist = $params->get('ip_blacklist','');
 		$list = explode("\n", $ip_blacklist);
-		if (in_array($_SERVER['REMOTE_ADDR'],$list)) {
+		if (in_array($_SERVER['REMOTE_ADDR'],$list)) 
+		{
 			JLog::add('Request from ' . $_SERVER['REMOTE_ADDR'] . ' ignored due to SSO system black list', JLog::DEBUG, 'sso');
 			return false;
 		}	
